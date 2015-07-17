@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vanderbilt Bioimages</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/cosmo/bootstrap.min.css">
+<!--<link rel="stylesheet" href="/stylesheets/style.css">-->
+<script>
+
+
+// function to turn XML object into a string
+function getXmlString(xml) {
+  if (window.ActiveXObject) { return xml.xml; }
+  return new XMLSerializer().serializeToString(xml);
+}
+
+// converts nodes of an XML object to text. See http://tech.pro/tutorial/877/xml-parsing-with-jquery
+// and http://stackoverflow.com/questions/4191386/jquery-how-to-find-an-element-based-on-a-data-attribute-value
+function parseXml(xml)
+{
+
+$("#div1").append("<table>");
+
+//step through each "result" element
+$(xml).find("result").each(function()
+	{
+
+	tableRow="<tr><td>";
+
+        // pull the "binding" element that has the name attribute of "image"
+	$(this).find("binding[name='image']").each(function()
+		  {
+		    tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
+		  }
+	  );
+
+        // pull the "binding" element that has the name attribute of "uri"
+	$(this).find("binding[name='uri']").each(function()
+		  {
+		    tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
+		    }
+	  );
+
+        // pull the "binding" element that has the name attribute of "title"
+	$(this).find("binding[name='title']").each(function()
+		  {
+		    tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
+		    $("#div1").append(tableRow);
+		  }
+	  );
+
+        $("#div1").append("</table>");
+	}
+);
+
+}
+
+$(document).ready(function(){
+
+    // creates a function that's executed when the button is clicked
+    $("button").click(function(){
+
+        //pulls data from the input boxes
+        input1=document.getElementById('box1').value;
+        input2=document.getElementById('box2').value;
+        input3=document.getElementById('box3').value;
+        input4=document.getElementById('box4').value;
+
+        // creates a string that contains the query with the data from the box
+        // inserted into the right place
+        var query = "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"+
+                    "PREFIX ac: <http://rs.tdwg.org/ac/terms/>"+
+                    "PREFIX dwc: <http://rs.tdwg.org/dwc/terms/>"+
+                    "PREFIX dsw: <http://purl.org/dsw/>"+
+                    "PREFIX Iptc4xmpExt: <http://iptc.org/std/Iptc4xmpExt/2008-02-29/>"+
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
+                    "PREFIX dcterms: <http://purl.org/dc/terms/>"+
+                    "SELECT DISTINCT ?uri ?image ?title WHERE {" +
+                    "?identification dwc:genus " + input1 + "." +
+                    "?identification dwc:specificEpithet " + input2 + "." +
+                    "?organism dsw:hasIdentification ?identification." +
+                    "?organism foaf:depiction ?image." +
+                    "?organism dsw:hasOccurrence ?occurrence." +
+                    "?occurrence dsw:atEvent ?event." +
+                    "?event dsw:locatedAt ?location." +
+                    "?location dwc:stateProvince " + input3 + "." +
+                    "?image Iptc4xmpExt:CVterm ?view." +
+                    "?view rdfs:subClassOf ?featureCategory." +
+                    "?featureCategory rdfs:label " + input4 + "." +
+                    "?image ac:hasServiceAccessPoint ?sap." +
+                    "?sap ac:accessURI ?uri." +
+		    "?sap ac:variant ac:Thumbnail." +
+		    "?image dcterms:title ?title."+
+                    "} " +
+                    "LIMIT 10";
+
+        // URL-encodes the query so that it can be appended as a query value
+        var encoded = encodeURIComponent(query)
+
+        // does the AJAX to send the HTTP GET to the Callimachus SPARQL endpoint
+        // then puts the result in the "data" variable
+        $.ajax({
+            type: 'GET',
+            url: 'http://rdf.library.vanderbilt.edu/sparql?query=' + encoded,
+            headers: {
+                Accept: 'application/sparql-results+xml'
+            },
+            success: parseXml
+        });
+    });
+});
+</script>
+</head>
+  <body>
+
+    <nav class="navbar navbar-default ">
+      <div class="container">
+        <div class="navbar-header">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Bioimages</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+
+        <div class="bs-component">
+             <div class="jumbotron">
+        <h2>Bioimages at Vanderbilt</h2>
+               <p><img src="http://www.library.vanderbilt.edu/webimages/Bioimages/magnolia.jpg" width="500"  /></p>
+               <form action="http://bioimages.vanderbilt.edu/">
+                    <input style="color: #FFFFFF; font-size:170%; background-color: #0099FF; font-weight: normal;" type="submit" name="submit" value="Learn More" id="submit" />
+                </form>
+             </div>
+        <h1>Find Bioimages</h1>
+
+
+
+    <span class="input-group-addon">
+    <input id="box1" type="select" size="50" value="?genus"/><br/>
+    <input id="box2" type="text" size="50" value="?species"/><br/>
+    <input id="box3" type="text" size="50" value="?state"/><br/>
+    <input id="box4" type="text" size="50" value="?category"/><br/>
+    <button>Search</button>
+      </span>
+      <!--Here is where the links get printed-->
+      <div id="div1"></div>
+
+    </div><!-- /.container -->
+        </div>
+        </div>
+  </body>
+</html>
+
