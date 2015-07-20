@@ -130,101 +130,125 @@ $(document).ready(function(){
 
     <div class="container">
 
-      <div class="starter-template">
-
+    <div class="starter-template">
         <div class="bs-component">
-             <div class="jumbotron">
-        <h2>Bioimages at Vanderbilt</h2>
-               <p><img src="http://www.library.vanderbilt.edu/webimages/Bioimages/magnolia.jpg" width="500"  /></p>
-               <form action="http://bioimages.vanderbilt.edu/">
+            <div class="jumbotron">
+                <h2>Bioimages at Vanderbilt</h2>
+                <p><img src="http://www.library.vanderbilt.edu/webimages/Bioimages/magnolia.jpg" width="500" /></p>
+                <form action="http://bioimages.vanderbilt.edu/">
                     <input style="color: #FFFFFF; font-size:170%; background-color: #0099FF; font-weight: normal;" type="submit" name="submit" value="Learn More" id="submit" />
                 </form>
-             </div>
-        <h1>Find Bioimages</h1>
+            </div>
+        </div>
+    </div>
 
+    <h1>Find Bioimages</h1>
+    <div class="form-horizontal input-group-addon">
+    <!-- <form class="form-inline" role="form"> -->
 
+        <div class="form-group">
+            <label for="box1" class="col-sm-4 control-label">Genus</label>
+            <div class="col-sm-5">
+                <input id="box1" type="text" value="?genus" class="form-control" />
+            </div>
+        </div>
 
-    <span class="input-group-addon">
-    Genus: <input id="box1" type="select" size="30" value="?genus"/><br/>
-    Species: <input id="box2" type="text" size="30" value="?species"/><br/>
-    State: <select name="stateDropdown" id="box3">
-      <option value='?state'>All States</option>
-      <option value='"Alabama"'>Alabama</option>
-      <option value='"Alaska"'>Alaska</option>
-      <option value='"Arizona"'>Arizona</option>
-      <option value='"Arkansas"'>Arkansas</option>
-      <option value='"California"'>California</option>
-      <option value='"Colorado"'>Colorado</option>
-      <option value='"Connecticut"'>Connecticut</option>
-      <option value='"Delaware"'>Delaware</option>
-      <option value='"Florida"'>Florida</option>
-      <option value='"Georgia"'>Georgia</option>
-      <option value='"Hawaii"'>Hawaii</option>
-      <option value='"Idaho"'>Idaho</option>
-      <option value='"Illinois"'>Illinois</option>
-      <option value='"Indiana"'>Indiana</option>
-      <option value='"Iowa"'>Iowa</option>
-      <option value='"Kansas"'>Kansas</option>
-      <option value='"Kentucky"'>Kentucky</option>
-      <option value='"Louisiana"'>Louisiana</option>
-      <option value='"Maine"'>Maine</option>
-      <option value='"Maryland"'>Maryland</option>
-      <option value='"Massachusettes"'>Massachusettes</option>
-      <option value='"Michigan"'>Michigan</option>
-      <option value='"Minnesota"'>Minnesota</option>
-      <option value='"Mississippi"'>Mississippi</option>
-      <option value='"Missouri"'>Missouri</option>
-      <option value='"Montana"'>Montana</option>
-      <option value='"Nebraska"'>Nebraska</option>
-      <option value='"Nevada"'>Nevada</option>
-      <option value='"New Hampshire"'>New Hampshire</option>
-      <option value='"New Jersey"'>New Jersey</option>
-      <option value='"New Mexico"'>New Mexico</option>
-      <option value='"New York"'>New York</option>
-      <option value='"North Carolina"'>North Carolina</option>
-      <option value='"North Dakota"'>North Dakota</option>
-      <option value='"Ohio"'>Ohio</option>
-      <option value='"Oklahoma"'>Oklahoma</option>
-      <option value='"Oregon"'>Oregon</option>
-      <option value='"Pennsylvania"'>Pennsylvania</option>
-      <option value='"Rhode Island"'>Rhode Island</option>
-      <option value='"South Carolina"'>South Carolina</option>
-      <option value='"South Dakota"'>South Dakota</option>
-      <option value='"Tennessee"'>Tennessee</option>
-      <option value='"Texas"'>Texas</option>
-      <option value='"Utah"'>Utah</option>
-      <option value='"Vermont"'>Vermont</option>
-      <option value='"Virginia"'>Virginia</option>
-      <option value='"Washington"'>Washington</option>
-      <option value='"West Virginia"'>West Virginia</option>
-      <option value='"Wisconsn"'>Wisconsin</option>
-      <option value='"Wyoming"'>Wyoming</option>
-    </select><br/>
-    Category: <select name="categoryDropdown" id="box4">
-      <option value='?category'>All Anatomical Features</option>
-      <option value='"bark"'>Bark</option>
-      <option value='"cone"'>Cone</option>
-      <option value='"fruit"'>Fruit</option>
-      <option value='"inflorescence"'>Inflorescence</option>
-      <option value='"leaf"'>Leaf</option>
-      <option value='"seed"'>Seed</option>
-      <option value='"stem"'>Stem</option>
-      <option value='"twig"'>Twig</option>
-      <option value='"unspecified"'>Unspecified</option>
-      <option value='whole gametophyte'>Whole Gametophyte</option>
-      <option value='"whole plant"'>Whole Plant</option>
-      <option value='"whole tree"'>Whole Tree</option>
-      <option value='"whole tree (or vine)"'>Whole Tree (Or Vine)</option>
-    </select><br/>
-    <button>Search</button>
-      </span>
+        <div class="form-group">
+            <label for="box2" class="col-sm-4 control-label">Species</label>
+            <div class="col-sm-5">
+                <input id="box2" type="text" size="30" value="?species" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="box3" class="col-sm-4 control-label">State</label>
+            <div class="col-sm-5">
+                <select name="stateDropdown" id="box3" class="form-control">
+                    <option value='?state'>All States</option>
+                    <option value='"Alabama"'>Alabama</option>
+                    <option value='"Alaska"'>Alaska</option>
+                    <option value='"Arizona"'>Arizona</option>
+                    <option value='"Arkansas"'>Arkansas</option>
+                    <option value='"California"'>California</option>
+                    <option value='"Colorado"'>Colorado</option>
+                    <option value='"Connecticut"'>Connecticut</option>
+                    <option value='"Delaware"'>Delaware</option>
+                    <option value='"Florida"'>Florida</option>
+                    <option value='"Georgia"'>Georgia</option>
+                    <option value='"Hawaii"'>Hawaii</option>
+                    <option value='"Idaho"'>Idaho</option>
+                    <option value='"Illinois"'>Illinois</option>
+                    <option value='"Indiana"'>Indiana</option>
+                    <option value='"Iowa"'>Iowa</option>
+                    <option value='"Kansas"'>Kansas</option>
+                    <option value='"Kentucky"'>Kentucky</option>
+                    <option value='"Louisiana"'>Louisiana</option>
+                    <option value='"Maine"'>Maine</option>
+                    <option value='"Maryland"'>Maryland</option>
+                    <option value='"Massachusettes"'>Massachusettes</option>
+                    <option value='"Michigan"'>Michigan</option>
+                    <option value='"Minnesota"'>Minnesota</option>
+                    <option value='"Mississippi"'>Mississippi</option>
+                    <option value='"Missouri"'>Missouri</option>
+                    <option value='"Montana"'>Montana</option>
+                    <option value='"Nebraska"'>Nebraska</option>
+                    <option value='"Nevada"'>Nevada</option>
+                    <option value='"New Hampshire"'>New Hampshire</option>
+                    <option value='"New Jersey"'>New Jersey</option>
+                    <option value='"New Mexico"'>New Mexico</option>
+                    <option value='"New York"'>New York</option>
+                    <option value='"North Carolina"'>North Carolina</option>
+                    <option value='"North Dakota"'>North Dakota</option>
+                    <option value='"Ohio"'>Ohio</option>
+                    <option value='"Oklahoma"'>Oklahoma</option>
+                    <option value='"Oregon"'>Oregon</option>
+                    <option value='"Pennsylvania"'>Pennsylvania</option>
+                    <option value='"Rhode Island"'>Rhode Island</option>
+                    <option value='"South Carolina"'>South Carolina</option>
+                    <option value='"South Dakota"'>South Dakota</option>
+                    <option value='"Tennessee"'>Tennessee</option>
+                    <option value='"Texas"'>Texas</option>
+                    <option value='"Utah"'>Utah</option>
+                    <option value='"Vermont"'>Vermont</option>
+                    <option value='"Virginia"'>Virginia</option>
+                    <option value='"Washington"'>Washington</option>
+                    <option value='"West Virginia"'>West Virginia</option>
+                    <option value='"Wisconsn"'>Wisconsin</option>
+                    <option value='"Wyoming"'>Wyoming</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="box4" class="col-sm-4 control-label">Category</label>
+            <div class="col-sm-5">
+                <select name="categoryDropdown" id="box4" class="form-control">
+                    <option value='?category'>All Anatomical Features</option>
+                    <option value='"bark"'>Bark</option>
+                    <option value='"cone"'>Cone</option>
+                    <option value='"fruit"'>Fruit</option>
+                    <option value='"inflorescence"'>Inflorescence</option>
+                    <option value='"leaf"'>Leaf</option>
+                    <option value='"seed"'>Seed</option>
+                    <option value='"stem"'>Stem</option>
+                    <option value='"twig"'>Twig</option>
+                    <option value='"unspecified"'>Unspecified</option>
+                    <option value='whole gametophyte'>Whole Gametophyte</option>
+                    <option value='"whole plant"'>Whole Plant</option>
+                    <option value='"whole tree"'>Whole Tree</option>
+                    <option value='"whole tree (or vine)"'>Whole Tree (Or Vine)</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-default">Search</button>
+    </div>
 
     <!--Here is where the links get printed-->
     <div id="div1"></div>
 
     </div><!-- /.container -->
-        </div>
-        </div>
+
   </body>
 </html>
 
