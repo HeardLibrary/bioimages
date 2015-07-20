@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vanderbilt Bioimages</title>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vanderbilt Bioimages</title>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/cosmo/bootstrap.min.css">
 <!--<link rel="stylesheet" href="/stylesheets/style.css">-->
-<script>
 
+<script>
 
 // function to turn XML object into a string
 function getXmlString(xml) {
@@ -19,43 +20,33 @@ function getXmlString(xml) {
 
 // converts nodes of an XML object to text. See http://tech.pro/tutorial/877/xml-parsing-with-jquery
 // and http://stackoverflow.com/questions/4191386/jquery-how-to-find-an-element-based-on-a-data-attribute-value
-function parseXml(xml)
-{
+function parseXml(xml) {
 
-$("#div1").append("<table>");
+    $("#div1").html("").append("<table>");
 
-//step through each "result" element
-$(xml).find("result").each(function()
-	{
+    //step through each "result" element
+    $(xml).find("result").each(function() {
 
-	tableRow="<tr><td>";
+    	tableRow="<tr><td>";
 
         // pull the "binding" element that has the name attribute of "image"
-	$(this).find("binding[name='image']").each(function()
-		  {
-		    tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
-		  }
-	  );
+    	$(this).find("binding[name='image']").each(function() {
+    	    tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
+    	});
 
         // pull the "binding" element that has the name attribute of "uri"
-	$(this).find("binding[name='uri']").each(function()
-		  {
-		    tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
-		    }
-	  );
+    	$(this).find("binding[name='uri']").each(function() {
+    	   tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
+    	});
 
         // pull the "binding" element that has the name attribute of "title"
-	$(this).find("binding[name='title']").each(function()
-		  {
-		    tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
-		    $("#div1").append(tableRow);
-		  }
-	  );
+    	$(this).find("binding[name='title']").each(function() {
+    		tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
+    		$("#div1").append(tableRow);
+    	});
+    });
 
-        $("#div1").append("</table>");
-	}
-);
-
+    $("#div1").append("</table>");
 }
 
 $(document).ready(function(){
@@ -64,10 +55,10 @@ $(document).ready(function(){
     $("button").click(function(){
 
         //pulls data from the input boxes
-        input1=document.getElementById('box1').value;
-        input2=document.getElementById('box2').value;
-        input3=document.getElementById('box3').value;
-        input4=document.getElementById('box4').value;
+        var genus = $('#box1').val();
+        var species = $('#box2').val();
+        var state = $('#box3').val();
+        var category = $('#box4').val();
 
         // creates a string that contains the query with the data from the box
         // inserted into the right place
@@ -79,21 +70,21 @@ $(document).ready(function(){
                     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
                     "PREFIX dcterms: <http://purl.org/dc/terms/>"+
                     "SELECT DISTINCT ?uri ?image ?title WHERE {" +
-                    "?identification dwc:genus " + input1 + "." +
-                    "?identification dwc:specificEpithet " + input2 + "." +
+                    "?identification dwc:genus " + genus + "." +
+                    "?identification dwc:specificEpithet " + species + "." +
                     "?organism dsw:hasIdentification ?identification." +
                     "?organism foaf:depiction ?image." +
                     "?organism dsw:hasOccurrence ?occurrence." +
                     "?occurrence dsw:atEvent ?event." +
                     "?event dsw:locatedAt ?location." +
-                    "?location dwc:stateProvince " + input3 + "." +
+                    "?location dwc:stateProvince " + state + "." +
                     "?image Iptc4xmpExt:CVterm ?view." +
                     "?view rdfs:subClassOf ?featureCategory." +
-                    "?featureCategory rdfs:label " + input4 + "." +
+                    "?featureCategory rdfs:label " + category + "." +
                     "?image ac:hasServiceAccessPoint ?sap." +
                     "?sap ac:accessURI ?uri." +
-		    "?sap ac:variant ac:Thumbnail." +
-		    "?image dcterms:title ?title."+
+		            "?sap ac:variant ac:Thumbnail." +
+		            "?image dcterms:title ?title."+
                     "} " +
                     "LIMIT 10";
 
@@ -114,7 +105,8 @@ $(document).ready(function(){
 });
 </script>
 </head>
-  <body>
+
+<body>
 
     <nav class="navbar navbar-default ">
       <div class="container">
@@ -153,14 +145,82 @@ $(document).ready(function(){
 
 
     <span class="input-group-addon">
-    <input id="box1" type="select" size="50" value="?genus"/><br/>
-    <input id="box2" type="text" size="50" value="?species"/><br/>
-    <input id="box3" type="text" size="50" value="?state"/><br/>
-    <input id="box4" type="text" size="50" value="?category"/><br/>
+    Genus: <input id="box1" type="select" size="30" value="?genus"/><br/>
+    Species: <input id="box2" type="text" size="30" value="?species"/><br/>
+    State: <select name="stateDropdown" id="box3">
+      <option value='?state'>All States</option>
+      <option value='"Alabama"'>Alabama</option>
+      <option value='"Alaska"'>Alaska</option>
+      <option value='"Arizona"'>Arizona</option>
+      <option value='"Arkansas"'>Arkansas</option>
+      <option value='"California"'>California</option>
+      <option value='"Colorado"'>Colorado</option>
+      <option value='"Connecticut"'>Connecticut</option>
+      <option value='"Delaware"'>Delaware</option>
+      <option value='"Florida"'>Florida</option>
+      <option value='"Georgia"'>Georgia</option>
+      <option value='"Hawaii"'>Hawaii</option>
+      <option value='"Idaho"'>Idaho</option>
+      <option value='"Illinois"'>Illinois</option>
+      <option value='"Indiana"'>Indiana</option>
+      <option value='"Iowa"'>Iowa</option>
+      <option value='"Kansas"'>Kansas</option>
+      <option value='"Kentucky"'>Kentucky</option>
+      <option value='"Louisiana"'>Louisiana</option>
+      <option value='"Maine"'>Maine</option>
+      <option value='"Maryland"'>Maryland</option>
+      <option value='"Massachusettes"'>Massachusettes</option>
+      <option value='"Michigan"'>Michigan</option>
+      <option value='"Minnesota"'>Minnesota</option>
+      <option value='"Mississippi"'>Mississippi</option>
+      <option value='"Missouri"'>Missouri</option>
+      <option value='"Montana"'>Montana</option>
+      <option value='"Nebraska"'>Nebraska</option>
+      <option value='"Nevada"'>Nevada</option>
+      <option value='"New Hampshire"'>New Hampshire</option>
+      <option value='"New Jersey"'>New Jersey</option>
+      <option value='"New Mexico"'>New Mexico</option>
+      <option value='"New York"'>New York</option>
+      <option value='"North Carolina"'>North Carolina</option>
+      <option value='"North Dakota"'>North Dakota</option>
+      <option value='"Ohio"'>Ohio</option>
+      <option value='"Oklahoma"'>Oklahoma</option>
+      <option value='"Oregon"'>Oregon</option>
+      <option value='"Pennsylvania"'>Pennsylvania</option>
+      <option value='"Rhode Island"'>Rhode Island</option>
+      <option value='"South Carolina"'>South Carolina</option>
+      <option value='"South Dakota"'>South Dakota</option>
+      <option value='"Tennessee"'>Tennessee</option>
+      <option value='"Texas"'>Texas</option>
+      <option value='"Utah"'>Utah</option>
+      <option value='"Vermont"'>Vermont</option>
+      <option value='"Virginia"'>Virginia</option>
+      <option value='"Washington"'>Washington</option>
+      <option value='"West Virginia"'>West Virginia</option>
+      <option value='"Wisconsn"'>Wisconsin</option>
+      <option value='"Wyoming"'>Wyoming</option>
+    </select><br/>
+    Category: <select name="categoryDropdown" id="box4">
+      <option value='?category'>All Anatomical Features</option>
+      <option value='"bark"'>Bark</option>
+      <option value='"cone"'>Cone</option>
+      <option value='"fruit"'>Fruit</option>
+      <option value='"inflorescence"'>Inflorescence</option>
+      <option value='"leaf"'>Leaf</option>
+      <option value='"seed"'>Seed</option>
+      <option value='"stem"'>Stem</option>
+      <option value='"twig"'>Twig</option>
+      <option value='"unspecified"'>Unspecified</option>
+      <option value='whole gametophyte'>Whole Gametophyte</option>
+      <option value='"whole plant"'>Whole Plant</option>
+      <option value='"whole tree"'>Whole Tree</option>
+      <option value='"whole tree (or vine)"'>Whole Tree (Or Vine)</option>
+    </select><br/>
     <button>Search</button>
       </span>
-      <!--Here is where the links get printed-->
-      <div id="div1"></div>
+
+    <!--Here is where the links get printed-->
+    <div id="div1"></div>
 
     </div><!-- /.container -->
         </div>
