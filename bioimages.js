@@ -2,9 +2,10 @@ function setGenusOptions() {
 	// create URI-encoded query string
         var string = 'SELECT DISTINCT ?genus WHERE {'
                     +'?identification <http://rs.tdwg.org/dwc/terms/genus> ?genus.'
-                    +'}';
+                    +'}'
+                    +'ORDER BY ASC(?genus)';
 	var encodedQuery = encodeURIComponent(string);
-        
+
         // send query to endpoint
         $.ajax({
             type: 'GET',
@@ -14,7 +15,7 @@ function setGenusOptions() {
             },
             success: parseGenusXml
         });
-	
+
 	}
 
 function setSpeciesOptions(passedGenus) {
@@ -22,9 +23,10 @@ function setSpeciesOptions(passedGenus) {
 	var string = 'SELECT DISTINCT ?species WHERE {'
 	            +'?identification <http://rs.tdwg.org/dwc/terms/genus> '+passedGenus+'.'
 	            +'?identification <http://rs.tdwg.org/dwc/terms/specificEpithet> ?species.'
-	            +'}';
+	            +'}'
+                +'ORDER BY ASC(?species)';
         var encodedQuery = encodeURIComponent(string);
-        
+
         // send query to endpoint
         $.ajax({
             type: 'GET',
@@ -34,16 +36,17 @@ function setSpeciesOptions(passedGenus) {
             },
             success: parseSpeciesXml
         });
-	
+
 	}
 
 function setStateOptions() {
 	// create URI-encoded query string
         var string = 'SELECT DISTINCT ?state WHERE {'
                     +'?identification <http://rs.tdwg.org/dwc/terms/stateProvince> ?state.'
-                    +'}';
+                    +'}'
+                    +'ORDER BY ASC(?state)';
 	var encodedQuery = encodeURIComponent(string);
-        
+
         // send query to endpoint
         $.ajax({
             type: 'GET',
@@ -53,7 +56,7 @@ function setStateOptions() {
             },
             success: parseStateXml
         });
-	
+
 	}
 
 function setCategoryOptions() {
@@ -64,9 +67,10 @@ function setCategoryOptions() {
                     "?image Iptc4xmpExt:CVterm ?view." +
                     "?view rdfs:subClassOf ?featureCategory." +
                     "?featureCategory rdfs:label ?category." +
-                    '}';
+                    '}'
+                    +'ORDER BY ASC(?category)';
 	var encodedQuery = encodeURIComponent(string);
-        
+
         // send query to endpoint
         $.ajax({
             type: 'GET',
@@ -76,7 +80,7 @@ function setCategoryOptions() {
             },
             success: parseCategoryXml
         });
-	
+
 	}
 
 function parseGenusXml(xml) {
@@ -95,7 +99,7 @@ function parseGenusXml(xml) {
 function parseSpeciesXml(xml) {
     // start the species dropdown over with "Any genus" as the first option
     $("#box2").replaceWith("<select name='genusDropdown' id='box2' class='form-control'><option value='?species'>Any species</option></select>");
-    
+
     //step through each "result" element
     $(xml).find("result").each(function() {
 
@@ -136,19 +140,19 @@ function parseCategoryXml(xml) {
 
 
 $(document).ready(function(){
-		
+
 	// fires when there is a change in the genus dropdown
 	$("#box1").change(function(){
 			var genusSelection= $("#box1").val();
 			setSpeciesOptions(genusSelection);
 	});
-		
+
 	// execute SPARQL query to get genus values and add them to the select options
 	setGenusOptions();
 	setStateOptions();
 	setCategoryOptions();
-	
-	/* 
+
+	/*
 	//see http://stackoverflow.com/questions/45888/what-is-the-most-efficient-way-to-sort-an-html-selects-options-by-value-while
 	// for this code to sort select options
 	var my_options = $("#box1 option");
