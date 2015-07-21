@@ -100,7 +100,7 @@ function parseGenusXml(xml) {
 }
 
 function parseSpeciesXml(xml) {
-    // start the species dropdown over with "Any genus" as the first option
+    // start the species dropdown over with "Any species" as the first option
     $("#box2 option:gt(0)").remove();
     $("#box2 option").text("Any Species");
 
