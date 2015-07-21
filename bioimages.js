@@ -1,7 +1,171 @@
-$(document).ready(function(){
+function setGenusOptions() {
+	// create URI-encoded query string
+        var string = 'SELECT DISTINCT ?genus WHERE {'
+                    +'?identification <http://rs.tdwg.org/dwc/terms/genus> ?genus.'
+                    +'}';
+	var encodedQuery = encodeURIComponent(string);
+        
+        // send query to endpoint
+        $.ajax({
+            type: 'GET',
+            url: 'http://rdf.library.vanderbilt.edu/sparql?query=' + encodedQuery,
+            headers: {
+                Accept: 'application/sparql-results+xml'
+            },
+            success: parseGenusXml
+        });
+	
+	}
 
-    // creates a function that's executed when the button is clicked
-    $("button").click(function(){
+function setSpeciesOptions(passedGenus) {
+	// create URI-encoded query string
+	var string = 'SELECT DISTINCT ?species WHERE {'
+	            +'?identification <http://rs.tdwg.org/dwc/terms/genus> '+passedGenus+'.'
+	            +'?identification <http://rs.tdwg.org/dwc/terms/specificEpithet> ?species.'
+	            +'}';
+        var encodedQuery = encodeURIComponent(string);
+        
+        // send query to endpoint
+        $.ajax({
+            type: 'GET',
+            url: 'http://rdf.library.vanderbilt.edu/sparql?query=' + encodedQuery,
+            headers: {
+                Accept: 'application/sparql-results+xml'
+            },
+            success: parseSpeciesXml
+        });
+	
+	}
+
+function setStateOptions() {
+	// create URI-encoded query string
+        var string = 'SELECT DISTINCT ?state WHERE {'
+                    +'?identification <http://rs.tdwg.org/dwc/terms/stateProvince> ?state.'
+                    +'}';
+	var encodedQuery = encodeURIComponent(string);
+        
+        // send query to endpoint
+        $.ajax({
+            type: 'GET',
+            url: 'http://rdf.library.vanderbilt.edu/sparql?query=' + encodedQuery,
+            headers: {
+                Accept: 'application/sparql-results+xml'
+            },
+            success: parseStateXml
+        });
+	
+	}
+
+function setCategoryOptions() {
+	// create URI-encoded query string
+        var string = "PREFIX Iptc4xmpExt: <http://iptc.org/std/Iptc4xmpExt/2008-02-29/>"+
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
+                    'SELECT DISTINCT ?category WHERE {' +
+                    "?image Iptc4xmpExt:CVterm ?view." +
+                    "?view rdfs:subClassOf ?featureCategory." +
+                    "?featureCategory rdfs:label ?category." +
+                    '}';
+	var encodedQuery = encodeURIComponent(string);
+        
+        // send query to endpoint
+        $.ajax({
+            type: 'GET',
+            url: 'http://rdf.library.vanderbilt.edu/sparql?query=' + encodedQuery,
+            headers: {
+                Accept: 'application/sparql-results+xml'
+            },
+            success: parseCategoryXml
+        });
+	
+	}
+
+function parseGenusXml(xml) {
+    //step through each "result" element
+    $(xml).find("result").each(function() {
+
+        // pull the "binding" element that has the name attribute of "state"
+        $(this).find("binding[name='genus']").each(function() {
+            bindingValue=$(this).find("literal").text();
+            quoteBindingValue='"'+bindingValue+'"';
+            $("#box1").append("<option value='"+quoteBindingValue+"'>"+bindingValue+'</option>');
+        });
+    });
+}
+
+function parseSpeciesXml(xml) {
+    // start the species dropdown over with "Any genus" as the first option
+    $("#box2").replaceWith("<select name='genusDropdown' id='box2' class='form-control'><option value='?species'>Any species</option></select>");
+    
+    //step through each "result" element
+    $(xml).find("result").each(function() {
+
+        // pull the "binding" element that has the name attribute of "species"
+        $(this).find("binding[name='species']").each(function() {
+            bindingValue=$(this).find("literal").text();
+            quoteBindingValue='"'+bindingValue+'"';
+            $("#box2").append("<option value='"+quoteBindingValue+"'>"+bindingValue+'</option>');
+        });
+    });
+}
+
+function parseStateXml(xml) {
+    //step through each "result" element
+    $(xml).find("result").each(function() {
+
+        // pull the "binding" element that has the name attribute of "state"
+        $(this).find("binding[name='state']").each(function() {
+            bindingValue=$(this).find("literal").text();
+            quoteBindingValue='"'+bindingValue+'"';
+            $("#box3").append("<option value='"+quoteBindingValue+"'>"+bindingValue+'</option>');
+        });
+    });
+}
+
+function parseCategoryXml(xml) {
+    //step through each "result" element
+    $(xml).find("result").each(function() {
+
+        // pull the "binding" element that has the name attribute of "state"
+        $(this).find("binding[name='category']").each(function() {
+            bindingValue=$(this).find("literal").text();
+            quoteBindingValue='"'+bindingValue+'"';
+            $("#box4").append("<option value='"+quoteBindingValue+"'>"+bindingValue+'</option>');
+        });
+    });
+}
+
+
+$(document).ready(function(){
+		
+	// fires when there is a change in the genus dropdown
+	$("#box1").change(function(){
+			var genusSelection= $("#box1").val();
+			setSpeciesOptions(genusSelection);
+	});
+		
+	// execute SPARQL query to get genus values and add them to the select options
+	setGenusOptions();
+	setStateOptions();
+	setCategoryOptions();
+	
+	/* 
+	//see http://stackoverflow.com/questions/45888/what-is-the-most-efficient-way-to-sort-an-html-selects-options-by-value-while
+	// for this code to sort select options
+	var my_options = $("#box1 option");
+	var selected = $("#box1").val();
+
+	my_options.sort(function(a,b) {
+			if (a.text > b.text) return 1;
+			else if (a.text < b.text) return -1;
+			else return 0
+	})
+
+	$("#box1").empty().append( my_options );
+	$("#box1").val(selected);
+	*/
+
+	// creates a function that's executed when the button is clicked
+	$("button").click(function(){
 
         //pulls data from the input boxes
         var genus = $('#box1').val();
@@ -35,7 +199,7 @@ $(document).ready(function(){
                     "?sap ac:variant ac:Thumbnail." +
                     "?image dcterms:title ?title."+
                     "} " +
-                    "LIMIT 10";
+                    "LIMIT 50";
 
         // URL-encodes the query so that it can be appended as a query value
         var encoded = encodeURIComponent(query)
@@ -52,13 +216,6 @@ $(document).ready(function(){
         });
     });
 });
-
-
-// function to turn XML object into a string
-function getXmlString(xml) {
-  if (window.ActiveXObject) { return xml.xml; }
-  return new XMLSerializer().serializeToString(xml);
-}
 
 // converts nodes of an XML object to text. See http://tech.pro/tutorial/877/xml-parsing-with-jquery
 // and http://stackoverflow.com/questions/4191386/jquery-how-to-find-an-element-based-on-a-data-attribute-value
@@ -90,3 +247,5 @@ function parseXml(xml) {
 
     $("#div1").append("</table>");
 }
+
+
