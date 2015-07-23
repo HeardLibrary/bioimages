@@ -15,38 +15,44 @@
 
 <body>
 
-    <nav class="navbar navbar-default ">
-      <div class="container">
-        <div class="navbar-header">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <a class="navbar-brand" href="#">Bioimages</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+  <nav class="navbar navbar-default">
+          <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                      data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Bioimages</a>
+              </div>
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                      <li class="active"><a href="/">Home <span class="sr-only"
+                              >(current)</span></a></li>
+                      <li><a href="about.html">About</a></li>
+
+                  </ul>
+              </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      </nav>
 
     <div class="container" style="margin-bottom: 50px;">
 
-    <div class="starter-template">
-        <div class="bs-component">
-            <div class="jumbotron">
-                <h2>Bioimages at Vanderbilt</h2>
-                <p><img src="magnolia.jpg" width="500" /></p>
-                <form action="http://bioimages.vanderbilt.edu/">
-                    <input style="color: #FFFFFF; font-size:170%; background-color: #0099FF; font-weight: normal;" type="submit" name="submit" value="Learn More" id="submit" />
-                </form>
-            </div>
-        </div>
-    </div>
+      <div class="starter-template">
+          <div class="bs-component">
+              <div class="jumbotron">
+                  <h2>Bioimages at Vanderbilt</h2>
+              <p><img class="img-responsive" src="magnolia.jpg" style="float:left;margin-right:7px;" width="210" />This application demonstrates the use of RDF metadata to create a lightweight search and display tool for the bioimages website.  </p>
+                  <form action="about.html">
+                      <input style="color: #FFFFFF; font-size:150%; background-color: #000000; font-weight: normal;" type="submit" name="submit" value="Learn More" id="submit" />
+                  </form>
+              </div>
+          </div>
+      </div>
 
     <h1>Find Bioimages</h1>
     <div class="form-horizontal input-group-addon">
@@ -120,4 +126,3 @@
 
   </body>
 </html>
-
