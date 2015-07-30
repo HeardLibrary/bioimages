@@ -221,38 +221,38 @@ function parseXml(xml) {
 
     // tell the user how many results we found
     var numResults = $(xml).find("result").length;
-    var resultsStatement = "";
     if (numResults < 1) {
-        resultsStatement = "<h4 class=\"text-warning\">No bioimages found</h4>";
+        $("#div1").html("<h4 class=\"text-warning\">No bioimages found</h4>");
     }
     else {
-        resultsStatement = "<h4 class=\"text-success\">Found "+numResults+" bioimages</h4>";
+        $("#div1").html("<h4 class=\"text-success\">Found "+numResults+" bioimages</h4>");
+
+        // Had to change the way the table is constructed due to the issue outlined here: http://stackoverflow.com/questions/8084687/jquery-appended-table-adds-closing-tag-at-the-end-of-the-text-automatically-why
+        var table = "<table class=\"table table-hover\">";
+
+        //step through each "result" element
+        $(xml).find("result").each(function() {
+
+            tableRow="<tr><td class=\"text-center\">";
+
+            // pull the "binding" element that has the name attribute of "image"
+            $(this).find("binding[name='image']").each(function() {
+                tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
+            });
+
+            // pull the "binding" element that has the name attribute of "uri"
+            $(this).find("binding[name='uri']").each(function() {
+               tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
+            });
+
+            // pull the "binding" element that has the name attribute of "title"
+            $(this).find("binding[name='title']").each(function() {
+                tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
+            });
+
+            table += tableRow;
+        });
+
+        $("#div1").append(table);
     }
-    $("#div1").html("").append(resultsStatement + "<table>");
-
-    //step through each "result" element
-    $(xml).find("result").each(function() {
-
-        tableRow="<tr><td>";
-
-        // pull the "binding" element that has the name attribute of "image"
-        $(this).find("binding[name='image']").each(function() {
-            tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
-        });
-
-        // pull the "binding" element that has the name attribute of "uri"
-        $(this).find("binding[name='uri']").each(function() {
-           tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
-        });
-
-        // pull the "binding" element that has the name attribute of "title"
-        $(this).find("binding[name='title']").each(function() {
-            tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
-            $("#div1").append(tableRow);
-        });
-    });
-
-    $("#div1").append("</table>");
 }
-
-
