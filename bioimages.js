@@ -65,11 +65,11 @@ function setStateOptions() {
 function setCategoryOptions() {
 	// create URI-encoded query string
         var string = "PREFIX Iptc4xmpExt: <http://iptc.org/std/Iptc4xmpExt/2008-02-29/>"+
-                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
+                    "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
                     'SELECT DISTINCT ?category WHERE {' +
                     "?image Iptc4xmpExt:CVterm ?view." +
-                    "?view rdfs:subClassOf ?featureCategory." +
-                    "?featureCategory rdfs:label ?category." +
+                    "?view skos:broader ?featureCategory." +
+                    "?featureCategory skos:prefLabel ?category." +
                     '}'
                     +'ORDER BY ASC(?category)';
 	var encodedQuery = encodeURIComponent(string);
@@ -133,8 +133,9 @@ function parseCategoryXml(xml) {
     //step through each "result" element
     $(xml).find("result").each(function() {
 
-        // pull the "binding" element that has the name attribute of "state"
+        // pull the "binding" element that has the name attribute of "category"
         $(this).find("binding[name='category']").each(function() {
+        	// This command seems to be stripping off the language tags, so must hack later by putting back on.
             bindingValue=$(this).find("literal").text();
             quoteBindingValue='"'+bindingValue+'"';
             $("#box4").append("<option value='"+quoteBindingValue+"'>"+bindingValue+'</option>');
@@ -178,6 +179,7 @@ $(document).ready(function(){
                     "PREFIX Iptc4xmpExt: <http://iptc.org/std/Iptc4xmpExt/2008-02-29/>"+
                     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
                     "PREFIX dcterms: <http://purl.org/dc/terms/>"+
+                    "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
                     "SELECT DISTINCT ?uri ?image ?title WHERE {" +
                     "?identification dwc:genus " + genus + "." +
                     "?identification dwc:specificEpithet " + species + "." +
@@ -188,13 +190,14 @@ $(document).ready(function(){
                     "?event dsw:locatedAt ?location." +
                     "?location dwc:stateProvince " + state + "." +
                     "?image Iptc4xmpExt:CVterm ?view." +
-                    "?view rdfs:subClassOf ?featureCategory." +
-                    "?featureCategory rdfs:label " + category + "." +
                     "?image ac:hasServiceAccessPoint ?sap." +
                     "?sap ac:accessURI ?uri." +
                     "?sap ac:variant ac:Thumbnail." +
                     "?image dcterms:title ?title."+
-                    "} " +
+                    "?view skos:broader ?featureCategory." +
+                    // Had to hack this by putting the stripped language tag back on.
+                    "?featureCategory skos:prefLabel " + category + "@en." +
+                    "}" +
                     "LIMIT " + numResultstoReturn;
 
         // URL-encodes the query so that it can be appended as a query value
