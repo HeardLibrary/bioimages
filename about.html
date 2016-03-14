@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vanderbilt Bioimages</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/cosmo/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="bioimages.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-default">
+          <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                      data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="index.html">Bioimages Search</a>
+              </div>
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                      <li><a href="index.html">Home</a></li>
+                      <li class="active"><a href="about.html">About <span class="sr-only"
+                              >(current)</span></a></li>
+
+                  </ul>
+              </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      </nav>
+
+    <div class="container" style="margin-bottom: 50px;">
+
+        <h2>About the Bioimages Search Project</h2>
+
+        <p>As part of a <a href="http://www.library.vanderbilt.edu/about/deansfellows.php">Dean's Fellow</a> project, we have created a demonstration web application that can be used to query the Bioimages database loaded into an RDF triplestore hosted by the Jean and Alexander Heard Library. To view the Bioimages website as maintained by Dr. Steven J. Baskauf, click the "Learn More" button on the main page.  The Bioimages database is available as a resource description framework (RDF) formatted dataset, describing over 13,000 images representing 3318 individuals of 1180 nominal taxa. RDF is a graph based model that links data in a three member relationship called a triple. More detail regarding RDF can be found <a href="http://www.w3.org/TR/rdf11-primer/">here</a>.</p>
+
+        <img src="formatofatriple.png" alt="Format of a Triple" class="img-responsive center-block" />
+
+        <p>Interrelationships are represented by graphs which connect various kinds of resources. The predicates that link the resources derive meaning from RDF vocabularies and ontologies. The Bioimages dataset draws upon a number of different vocabularies, two of which include Darwin Core and Darwin-SW which can be further read about <a href="http://rs.tdwg.org/dwc/">here</a> and <a href="http://www.semantic-web-journal.net/system/files/swj635.pdf">here</a> respectively. If you would like a more in depth explanation of how ontologies are built, the Web Ontology Language is a good place to start, information for which can be found <a href="http://www.w3.org/2001/sw/wiki/OWL">here</a>. The only limiting factor to the number of ways nodes in the data can be connected is the number of terms in the utilized vocabularies, making the RDF dataset an n-directional graph.</p>
+
+        <p>In order to be able to effectively query the Bioimages dataset, we have employed the use of the Sparql Protocol and RDF Querying Language (SPARQL). SPARQL is a querying language tailor-made to retrieve data stored in RDF format and is a World Wide Web Consortium (W3C) standard. More detail regarding SPARQL can be found <a href="http://www.w3.org/TR/sparql11-overview/">here</a>. In order to demonstrate the ability to host a queryable SPARQL database in RDF format on the web, we used a web application called Callimachus. Callimachus is an open source linked data management system that has the ability to ingest and house an RDF database. Callimachus maintains our web queryable SPARQL endpoint for the Bioimages dataset. Further reading can be found <a href="http://callimachusproject.org/docs/1.4/callimachus-reference.docbook?view">here</a>.</p>
+
+        <img src="flowofdata.png" alt="Flow of data between user and endpoint" class="img-responsive center-block" />
+
+        <p>The interface we have created allows users to query a SPARQL endpoint and retrieve existing information. It is also possible to use the endpoint to construct entailed triples that are not explicitly stated. For example, using SPARQL, we have the ability to construct additional triples in the reverse direction of existing triples.</p>
+
+        <img src="fwdreversetriples.png" alt="Forward and Reverse Triples" class="img-responsive center-block" />
+
+        <p>We have set up the SPARQL endpoint in a way that allows for the incorporation of additional datasets as well as the ability to update all current datasets. Such an ability makes it possible to combine a number of unique data sets and construct queries that could lead to the construction of triples that would not have existed if the datasets were maintained separately. This embodies the goal of linked data, and we have both set up a simple interface to query linked data, as well as primed the Vanderbilt Library to host additional RDF datasets.</p>
+
+    </div><!-- /.container -->
+
+    <footer class="footer">
+      <div class="container">
+        <p>Jean and Alexander Heard Library, Vanderbilt University</p>
+      </div>
+    </footer>
+
+  </body>
+</html>

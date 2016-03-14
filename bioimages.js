@@ -1,3 +1,6 @@
+var numResultstoReturn = 50; // the max number of results to return in the SPARQL search query
+var numResultsPerPage = 10; // the number of search results per page, for pagination
+
 function setGenusOptions() {
 	// create URI-encoded query string
         var string = 'SELECT DISTINCT ?genus WHERE {'
@@ -97,8 +100,9 @@ function parseGenusXml(xml) {
 }
 
 function parseSpeciesXml(xml) {
-    // start the species dropdown over with "Any genus" as the first option
-    $("#box2").replaceWith("<select name='genusDropdown' id='box2' class='form-control'><option value='?species'>Any species</option></select>");
+    // start the species dropdown over with "Any species" as the first option
+    $("#box2 option:gt(0)").remove();
+    $("#box2 option").text("Any Species");
 
     //step through each "result" element
     $(xml).find("result").each(function() {
@@ -140,6 +144,8 @@ function parseCategoryXml(xml) {
 
 
 $(document).ready(function(){
+    // not searching initially, so hide the spinner icon
+    $('#searchSpinner').hide();
 
 	// fires when there is a change in the genus dropdown
 	$("#box1").change(function(){
@@ -152,24 +158,10 @@ $(document).ready(function(){
 	setStateOptions();
 	setCategoryOptions();
 
-	/*
-	//see http://stackoverflow.com/questions/45888/what-is-the-most-efficient-way-to-sort-an-html-selects-options-by-value-while
-	// for this code to sort select options
-	var my_options = $("#box1 option");
-	var selected = $("#box1").val();
-
-	my_options.sort(function(a,b) {
-			if (a.text > b.text) return 1;
-			else if (a.text < b.text) return -1;
-			else return 0
-	})
-
-	$("#box1").empty().append( my_options );
-	$("#box1").val(selected);
-	*/
-
 	// creates a function that's executed when the button is clicked
-	$("button").click(function(){
+	$("#searchButton").click(function(){
+        // searching, so show the spinner icon
+        $('#searchSpinner').show();
 
         //pulls data from the input boxes
         var genus = $('#box1').val();
@@ -203,7 +195,7 @@ $(document).ready(function(){
                     "?sap ac:variant ac:Thumbnail." +
                     "?image dcterms:title ?title."+
                     "} " +
-                    "LIMIT 50";
+                    "LIMIT " + numResultstoReturn;
 
         // URL-encodes the query so that it can be appended as a query value
         var encoded = encodeURIComponent(query)
@@ -224,32 +216,43 @@ $(document).ready(function(){
 // converts nodes of an XML object to text. See http://tech.pro/tutorial/877/xml-parsing-with-jquery
 // and http://stackoverflow.com/questions/4191386/jquery-how-to-find-an-element-based-on-a-data-attribute-value
 function parseXml(xml) {
+    // done searching, so hide the spinner icon
+    $('#searchSpinner').hide();
 
-    $("#div1").html("").append("<table>");
+    // tell the user how many results we found
+    var numResults = $(xml).find("result").length;
+    if (numResults < 1) {
+        $("#div1").html("<h4 class=\"text-warning\">No bioimages found</h4>");
+    }
+    else {
+        $("#div1").html("<h4 class=\"text-success\">Found "+numResults+" bioimages</h4>");
 
-    //step through each "result" element
-    $(xml).find("result").each(function() {
+        // Had to change the way the table is constructed due to the issue outlined here: http://stackoverflow.com/questions/8084687/jquery-appended-table-adds-closing-tag-at-the-end-of-the-text-automatically-why
+        var table = "<table class=\"table table-hover\">";
 
-        tableRow="<tr><td>";
+        //step through each "result" element
+        $(xml).find("result").each(function() {
 
-        // pull the "binding" element that has the name attribute of "image"
-        $(this).find("binding[name='image']").each(function() {
-            tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
+            tableRow="<tr><td class=\"text-center\">";
+
+            // pull the "binding" element that has the name attribute of "image"
+            $(this).find("binding[name='image']").each(function() {
+                tableRow=tableRow+"<a href='"+$(this).find("uri").text() + "'>";
+            });
+
+            // pull the "binding" element that has the name attribute of "uri"
+            $(this).find("binding[name='uri']").each(function() {
+               tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
+            });
+
+            // pull the "binding" element that has the name attribute of "title"
+            $(this).find("binding[name='title']").each(function() {
+                tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
+            });
+
+            table += tableRow;
         });
 
-        // pull the "binding" element that has the name attribute of "uri"
-        $(this).find("binding[name='uri']").each(function() {
-           tableRow=tableRow+"<img src='"+$(this).find("uri").text() + "'></a></td><td>";
-        });
-
-        // pull the "binding" element that has the name attribute of "title"
-        $(this).find("binding[name='title']").each(function() {
-            tableRow=tableRow+$(this).find("literal").text() + "</td></tr>";
-            $("#div1").append(tableRow);
-        });
-    });
-
-    $("#div1").append("</table>");
+        $("#div1").append(table);
+    }
 }
-
-
