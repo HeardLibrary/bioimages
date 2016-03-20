@@ -135,9 +135,9 @@ function parseCategoryXml(xml) {
 
         // pull the "binding" element that has the name attribute of "category"
         $(this).find("binding[name='category']").each(function() {
-        	// This command seems to be stripping off the language tags, so must hack later by putting back on.
+            // This command seems to be stripping off the language tags, so must hack by putting back on.
             bindingValue=$(this).find("literal").text();
-            quoteBindingValue='"'+bindingValue+'"';
+            quoteBindingValue='"'+bindingValue+'"@en';
             $("#box4").append("<option value='"+quoteBindingValue+"'>"+bindingValue+'</option>');
         });
     });
@@ -195,8 +195,7 @@ $(document).ready(function(){
                     "?sap ac:variant ac:Thumbnail." +
                     "?image dcterms:title ?title."+
                     "?view skos:broader ?featureCategory." +
-                    // Had to hack this by putting the stripped language tag back on.
-                    "?featureCategory skos:prefLabel " + category + "@en." +
+                    "?featureCategory skos:prefLabel " + category + 
                     "}" +
                     "LIMIT " + numResultstoReturn;
 
